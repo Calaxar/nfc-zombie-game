@@ -7,6 +7,8 @@ from time import sleep
 from getpass import getpass
 import os
 from random import randint
+from challenges import CHALLENGES
+from difflib import get_close_matches
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
@@ -35,14 +37,30 @@ def loadCure(cure) :
     
 def startCountdown() :
     for x in range(0, 10) :
-    clear()
-    print(10 - x)
-    sleep(1)
+        clear()
+        print(10 - x)
+        sleep(1)
+    
+def runChallenge(challenges) :
+    challengeKey = challenges[randint(0, len(challenges))]
+    inputAns = ""
+    answer = CHALLENGES[challengeKey]
+    print("CHALLENGE")
+    while inputAns != answer :
+        inputAns = str.lower(raw_input(challengeKey + ": "))
+        if inputAns != answer : 
+            if get_close_matches(inputAns, [answer], 1, 0.66) :
+                print("Close! Try again.")
+            else :
+                print("Incorrect. Try again.")
+            sleep(0.5)
+    return challengeKey
 
 rc522 = RFID()
 
 numFigsFound = 0
 figsFound = []
+challenges = list(CHALLENGES.keys())
 
 print("NFCZombies Initialising...")
 print("Setup:")
@@ -68,13 +86,11 @@ while numFigsFound < figNum :
             else:
                 figsFound.append(uid)
                 print("New figure registered.")
-                ans = ""
-                while ans != "yes" :
-                    ans = raw_input("Can you answer this question?: ")
+                challenges.remove(runChallenge(challenges))
                 numFigsFound += 1
                 print("Correct! Figures remaining: {}".format(figNum - numFigsFound))
                 if numFigsFound < figNum :
                     print("Ready to scan next figure...")
-                else :
+                #else :
                     #loadCure(cure)
             sleep(1)
