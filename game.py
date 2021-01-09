@@ -13,32 +13,35 @@ from difflib import get_close_matches
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
-def clear() : os.system('clear')
+def printZombies() :
+    print(" ________  __  __ ____ ___ _____ ____ ")
+    print("|__  / _ \|  \/  | __ )_ _| ____/ ___| ")
+    print("  / / | | | |\/| |  _ \| ||  _| \___ \ ")
+    print(" / /| |_| | |  | | |_) | || |___ ___) |")
+    print("/____\___/|_|  |_|____/___|_____|____/ ")
 
-def loadCure(cure) :
+def clear() :
+    os.system('clear')
+    printZombies()
+    print("----------------------------------------------------------------")
+    print("Figures found: " + str(numFigsFound) + " | Figures remaining: " + str(figNum - numFigsFound))
+    print("----------------------------------------------------------------")
+
+def loadCure() :
+    loadingProgress = [1, 10, 30, 70, 90, 99, 100]
     print("All required figures found!")
     print("Loading cure...")
-    sleep(randint(1, 3))
-    print("1%")
-    sleep(randint(1, 3))
-    print("10%")
-    sleep(randint(1, 3))
-    print("30%")
-    sleep(randint(1, 3))
-    print("70%")
-    sleep(randint(1, 3))
-    print("90%")
-    sleep(randint(1, 3))
-    print("99%")
-    sleep(randint(1, 3))
-    print("100%")
     sleep(1)
+    for x in loadingProgress :
+        clear()
+        print("Loading cure... " + str(x) + "%")
+        sleep(randint(1, 3))
     print("CURE UNLOCKED: {}".format(cure))
     
 def startCountdown() :
     for x in range(0, 10) :
         clear()
-        print(10 - x)
+        print("Starting in... " + str(10 - x))
         sleep(1)
     
 def runChallenge(challenges) :
@@ -68,7 +71,7 @@ figNum = input("How many figurines need to be found?: ")
 cure = getpass(prompt="What's the secret cure?: ", stream=None)
 print("Starting in...")
 sleep(1)
-#startCountdown()
+startCountdown()
 clear()
 print("Go!!!")
 sleep(5)
@@ -85,12 +88,15 @@ while numFigsFound < figNum :
                 print("Figure has already been registered, find a new one!")
             else:
                 figsFound.append(uid)
+                clear()
                 print("New figure registered.")
                 challenges.remove(runChallenge(challenges))
                 numFigsFound += 1
                 print("Correct! Figures remaining: {}".format(figNum - numFigsFound))
+                sleep(1)
+                clear()
                 if numFigsFound < figNum :
                     print("Ready to scan next figure...")
-                #else :
-                    #loadCure(cure)
+                else :
+                    loadCure()
             sleep(1)
