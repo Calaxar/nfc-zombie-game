@@ -26,3 +26,5 @@ RST | 22 | GPIO25
 3.3V | 17 | 3V3 
 
 The [pi-rc522](https://github.com/ondryaso/pi-rc522) library will need to be installed to run the script
+
+The Rasbperry pi must have SPI enabled to use the RFID module
